@@ -3,9 +3,10 @@
 ## Index
 
 - [Architect Commands](#architect-commands)
-- [Scripting](#scripting)
-- [Scripts.lib](#library)
-- [Database](#database)
+- [Scripting](#Scripting)
+- [Scripts.lib](#Scripts.lib)
+- [Macros](#Macros)
+- [Database](#Database)
 
 
 ## Architect Commands
@@ -125,6 +126,57 @@ function(context, args) { // arg1:val1, arg2:val2, arg3:#s.an.example, arg4:”e
 
 After uploading the script, you might need to run **scripts.user** to update your autocomplete, and then it should work.
 
+## Macros
+
+Macros are fairly simple, and very useful in hackmud. This is not strictly coding related, but they are not that widely known. Example:
+
+/macroname = test{target:"canhavefixedarguments"}
+
+/hl = kernel.hardline
+/dc = kernel.hardline{dc:true}
+
+Running /macroname or /hl or /dc will run exactly that command. Macros unfortunately cannot themselves have arguments, which limits what you can do with them somewhat.
+
+## Database
+Each users’ database in hackmud is a MongoDB collection, in which data is stored as JSON documents.
+
+Query Objects:\
+Query Objects are a regular JSON object containing keys and values you want to search against.\
+Projections:\
+Projections allow you to fetch specific subfields in a #db object. These speed things up quite a bit if your document is large. \
+Check https://docs.mongodb.com/v3.0/tutorial/project-fields-from-query-results/ for more information.
+
+### Inserting
+`#db.i()`\
+[Mongodb documentation on inserting](https://docs.mongodb.com/manual/reference/method/db.collection.insert/)\
+This command creates new #db documents.\
+Called like `#db.i(<JSON object or array of JSON objects>);`\
+Ex: `#db.i({ SID:”scriptname” })` Inserts a document with key “SID” and value “scriptname”
+
+### Removing
+`#db.r()`\
+[Mongodb documentation on removing](https://docs.mongodb.com/manual/reference/method/db.collection.remove/)\
+This command deletes #db documents matching your query.\
+Called like `#db.r({query})`;\
+Ex: `#db.r({ SID:”scriptname” })` removes all documents where key “SID” contains the value “scriptname”.
+
+### Finding
+`#db.f()`\
+[Mongodb documentation on finding](https://docs.mongodb.com/manual/reference/method/db.collection.find/)\
+This command returns any documents matching your query.\
+Called like `#db.f({query}, {projection}).command()` where “command” is either “first” or “array”/\
+Ex: `#db.f({ SID:”scriptname” }).array()` returns an array of documents where key “SID” contains the value “scriptname”.\
+Ex: `#db.f({ SID:”scriptname” }, { field:1, _id:0 }).first()` returns the value for the key “field” inside the first document it finds where key “SID” contains the value “scriptname”.
+
+### Updating
+`#db.u()`\
+[Mongodb documentation on updating](https://docs.mongodb.com/manual/reference/method/db.collection.update/)\
+This command updates any pre-existing documents matching the query.\
+Called like `#db.u({query}, { updateOper:{updatedfields} })` applies “update” to any documents matching the query.\
+Ex: `#db.u({ SID:”scriptname” }, { $set:{field:”new value”} })` sets key field to “new value” in any documents where key “SID” contains the value “scriptname”.\
+This can be a very complex operation. It is HIGHLY recommended you follow the aforementioned hyperlink.\
+
+
 ## Scripts.lib
 This is a code library containing useful helper functions you can use in your scripts.
 
@@ -158,3 +210,20 @@ select | (array, fn) | array | Returns a collection of values from array that ma
 count | (array, fn) | number | Returns a number of items from array that matches the fn predicate. If the predicate returns true, the count function increments the returned number by one. |
 select_one | (array, fn) | array | Same as the select function, but returns the first value that matches the predicate. | 
 map | (array, fn) | array | Creates a new array with the results of calling a provided function on every element in the calling array. | `var new_arr = l.map(old_arr, x => x*2);`
+shuffle | (array) | array | Shuffles an array and returns it. |
+sort_asc | (one, two) | array | If one > two, returns 1. If two is greater than one, return -1. Else return 0. Looks like a sorting function |
+sort_desc | (one, two) | array | Returns the opposite of the above, ie -1 on one > two, and 1 on two > one |
+num_sort_asc | (...?) |  |  |
+num_sort_desc | (...?) |  |  |
+add_time | (date, add_ms) | date | Gets the date of date + add_ms (milliseconds) | `return l.add_time(new Date(), 4000);`
+security_level_names | | | It's not a function, array containing the security levels (NULLSEC, LOWSEC, MIDSEC, HIGHSEC, FULLSEC) | `var nullsec = l.security_level_names[0];`
+get_security_level_name | (level) | string | Takes a parameter between 0 and 4 (inclusive), returns the corresponding security from NULLSEC (0) to FULLSEC (4) |
+create_rand_string | (len) | string | Returns a random string consisting of lowercase alphanumeric characters. |
+get_user_from_script | (script_name) | string | Returns the user from a script name. Ie me.target returns me |
+u_sort_num_arr_desc | | | |
+can_continue_execution | (ms) | boolean | Returns true whether the script can still be on execution in the provided time. |`l.can_continue_execution(1000);`
+can_continue_execution_error | | | |
+can_continue_execution_error | | | |
+date | | | |
+get_date | | date | Gets the current date |
+get_date_utcsecs | | number | Gets the current time from the date (ie Date.getTime()) |
