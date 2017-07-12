@@ -3,10 +3,20 @@
 ## Index
 
 - [Architect Commands](#architect-commands)
+- - [Creating a script](#creating-a-script)
+- - [Opening the script dir](#opening-the-script-directory)
+- - [Uploading a script](#uploading-a-script)
+- - [Deleting a local script](#deleting-a-script-localy)
+- - [Listing all scripts](#listing-all-local-and-uploaded-scripts)
+- - [The help command](#the-help-command)
 - [Scripting](#scripting)
 - [Scripts.lib](#scriptslib)
 - [Macros](#macros)
 - [Database](#database)
+- - [Inserting](#inserting)
+- - [Removing](#removing)
+- - [Finding](#finding)
+- - [Updating](#updating)
 
 
 ## Architect Commands
