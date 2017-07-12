@@ -3,10 +3,10 @@
 ## Index
 
 - [Architect Commands](#architect-commands)
-- [Scripting](#Scripting)
-- [Scripts.lib](#Scripts.lib)
-- [Macros](#Macros)
-- [Database](#Database)
+- [Scripting](#scripting)
+- [Scripts.lib](#scriptslib)
+- [Macros](#macros)
+- [Database](#database)
 
 
 ## Architect Commands
