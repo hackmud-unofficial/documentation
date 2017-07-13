@@ -225,6 +225,7 @@ last |
 
 ### User Class
 Note: the Account class generates the users using this class.
+
 Method name | Arguments | Description
 --- | --- | ---
 User | (account, name, dat) | The User constructor
