@@ -17,7 +17,7 @@
 - - [Removing](#removing)
 - - [Finding](#finding)
 - - [Updating](#updating)
-- [Chat API](#chat-api)
+- [Chat API Wrapper](#chat-api-wrapper)
 - - [Account Class](#account-class)
 - - [User Class](#user-class)
 - - [Channel Class](#channel-class)
@@ -191,8 +191,8 @@ Called like `#db.u({query}, { updateOper:{updatedfields} })` applies “update�
 Ex: `#db.u({ SID:”scriptname” }, { $set:{field:”new value”} })` sets key field to “new value” in any documents where key “SID” contains the value “scriptname”.\
 This can be a very complex operation. It is HIGHLY recommended you follow the aforementioned hyperlink.\
 
-## Chat API
-The chat api allows you to read and send messages through the users you own.
+## Chat API Wrapper
+The chat api wrapper allows you to read and send messages through the users you own.
 You will need to get the `chat_pass` from the game. (running `chat_pass`).
 
 The API contains different classes:
