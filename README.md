@@ -17,6 +17,11 @@
 - - [Removing](#removing)
 - - [Finding](#finding)
 - - [Updating](#updating)
+- [Chat API](#chat-api)
+- - [Account Class](#account-class)
+- - [User Class](#user-class)
+- - [Channel Class](#channel-class)
+- - [Examples](#examples)
 
 
 ## Architect Commands
@@ -186,6 +191,100 @@ Called like `#db.u({query}, { updateOper:{updatedfields} })` applies “update�
 Ex: `#db.u({ SID:”scriptname” }, { $set:{field:”new value”} })` sets key field to “new value” in any documents where key “SID” contains the value “scriptname”.\
 This can be a very complex operation. It is HIGHLY recommended you follow the aforementioned hyperlink.\
 
+## Chat API
+The chat api allows you to read and send messages through the users you own.
+You will need to get the `chat_pass` from the game. (running `chat_pass`).
+
+The API contains different classes:
+
+### Account Class
+```js
+var API = require('./chat.js')
+var acct = new API.Account();
+
+acct.login("token or pass").then((data) => {
+    // data is a account object
+    // means it contains the users, token, last and the methods...
+    var username = data.users.username; 
+})
+```
+
+Method name | Arguments | Description
+--- | --- | ---
+Account | last=null | The Account constructor
+login | pass | Method used to login
+update | token | Updates the token
+poll | ext={} | Polls the chat
+print | | Prints the account details.
+
+Properties | Description
+--- | ---
+users | Array object of the users you own.
+token | String storing your token.
+last |
+
+### User Class
+Note: the Account class generates the users using this class.
+Method name | Arguments | Description
+--- | --- | ---
+User | (account, name, dat) | The User constructor
+tell | (to, msg) | Sends a private message to the user "to"
+print | | Prints the user details.
+
+Properties | Description
+--- | ---
+account | Object that stores the account of the user.
+name | Name of the user.
+channels | Object Array containing the channels the user is in.
+
+### Channel Class
+
+Method name | Arguments | Description
+--- | --- | ---
+Channel | (user, name, users) | Channel constructor.
+send | (msg) | Sends the "msg" to the channel
+print | | Prints the channel details
+
+Properties | Description
+--- | ---
+user | Your user
+name | The name of the channel
+users | Array containing the users of the channel.
+
+### Examples
+
+#### Login
+```js
+var API = require('./chat.js');
+var acct = new API.Account();
+
+acct.login("token or pass").then((data) => {
+    ...
+})
+```
+
+#### Sending a message to a channel
+```js
+var API = require('./chat.js');
+var acct = new API.Account();
+
+acct.login("token or pass").then((data) => {
+    var channel = data.users.username.channels["0000"];
+    channel.send("Hello world!);
+})
+```
+
+#### Reading the chat
+```js
+var API = require('./chat.js')
+var acct = new API.Account();
+
+acct.login("token or pass").then((data) => {
+    data.poll().then(o => {
+        console.log(o.chats.user); // Replace user with your username
+    })
+})
+```
 
 ## Scripts.lib
 This is a code library containing useful helper functions you can use in your scripts.
