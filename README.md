@@ -270,7 +270,7 @@ var acct = new API.Account();
 
 acct.login("token or pass").then((data) => {
     var channel = data.users.username.channels["0000"];
-    channel.send("Hello world!);
+    channel.send("Hello world!");
 })
 ```
 
