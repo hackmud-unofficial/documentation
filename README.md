@@ -1,7 +1,7 @@
 # Hackmud - Documentation
 
 ## Credits
-Originally created by @ciastex_ and @i20k, slightly edited and updated by @ryo
+Originally created by @ciastex_ and @i20k, slightly edited and updated by @ryo\
 Special thanks to @dtr/@sudo, @ada and @soron for their expertise.
 
 If you have any questions, don't hesitate to hit us on Discord:
