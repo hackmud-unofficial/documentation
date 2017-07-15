@@ -152,18 +152,18 @@ After uploading the script, you might need to run **scripts.user** to update you
 
 Macros are fairly simple, and very useful in hackmud. This is not strictly coding related, but they are not that widely known. Example:
 
-/macroname = test{target:"canhavefixedarguments"}
+`/macroname = test{target:"canhavefixedarguments"}`
 
-/hl = kernel.hardline
-/dc = kernel.hardline{dc:true}
+`/hl = kernel.hardline`
+`/dc = kernel.hardline{dc:true}`
 
 Running /macroname or /hl or /dc will run exactly that command. 
 
 Macro with arguments
 
-/fullsec = scripts.fullsec{{count:{0}}}
+/`fullsec = scripts.fullsec{{count:{0}}}`
 
-Notice that you need {{}} (double brackets), call like `/fullsec 128`
+Notice that you need `{{}}` (double brackets), call like `/fullsec 128`
 
 
 
