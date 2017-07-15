@@ -161,7 +161,7 @@ Running /macroname or /hl or /dc will run exactly that command.
 
 Macro with arguments
 
-/`fullsec = scripts.fullsec{{count:{0}}}`
+`/fullsec = scripts.fullsec{{count:{0}}}`
 
 Notice that you need `{{}}` (double brackets), call like `/fullsec 128`
 
