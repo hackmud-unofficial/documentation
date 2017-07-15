@@ -157,7 +157,15 @@ Macros are fairly simple, and very useful in hackmud. This is not strictly codin
 /hl = kernel.hardline
 /dc = kernel.hardline{dc:true}
 
-Running /macroname or /hl or /dc will run exactly that command. Macros unfortunately cannot themselves have arguments, which limits what you can do with them somewhat.
+Running /macroname or /hl or /dc will run exactly that command. 
+
+Macro with arguments
+
+/fullsec = scripts.fullsec{{count:{0}}}
+
+Notice that you need {{}} (double brackets), call like `/fullsec 128`
+
+
 
 ## Database
 Each users’ database in hackmud is a MongoDB collection, in which data is stored as JSON documents.
