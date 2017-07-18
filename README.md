@@ -164,7 +164,7 @@ Macro with arguments
 `/fullsec = scripts.fullsec{{start:{0}}}`
 
 Notice that you need `{{}}` (double brackets), call like `/fullsec 128`
-
+You need to replace every "real" {} with {{}}
 
 
 ## Database
