@@ -62,14 +62,14 @@ Possible arguments ***AFTER*** the filename:
 ### Downloading a script
 **Command:** `#down <filename>`\
 This command will download an already uploaded script from the server.\
-You could use this to download a script to another machine.\
+You could use this to download a script to another machine.
 
 ----
 
 ### Deleting a script localy
 **Command:** `#delete <filename>`\
 This command will remove your script from your computer’s file system, which means you won’t be able to access it from your editor anymore.\
-Be careful around this command, though - it runs without any confirmation.\
+Be careful around this command, though - it runs without any confirmation.
 
 ----
 
@@ -106,13 +106,13 @@ The scriptor syntax is as follows:\
 The above can be then passed to your script as an argument, like the following (remember to upload the script!):\
 `crk_ez21 { target:#s.user.command }`
 
-To call a command the scriptor points to, there’s a scriptor-specific method which optionally accepts your arguments that will be passed to the called command:\
+To call a command the scriptor points to, there’s a scriptor-specific method which optionally accepts your arguments that will be passed to the called command:
 ```js
 args.target.call({/* optional arguments for the called scriptor */})
 ```
 
 If you want to call a hard-coded script (ed note: this isn’t technically a scriptor, it is just a script call), you can do so without using a scriptor, as follows.\
-Be aware, you cannot store a script to a variable like this:\
+Be aware, you cannot store a script to a variable like this:
 ```js
 var x = #fs.user.name
 ```
@@ -131,7 +131,7 @@ function foo(args) {
 
 As of 20/10/2017, using the syntax `#s.user.script` will result in an error while uploading. The syntax for scriptors is still #s.user.script, however.\
 The new syntax is as follows:
-`#fs.user.script` OR `#4s.user.script`
+`#fs.user.script` OR `#4s.user.script`\
 Sec levels go from 0 (NULLSEC) to 4 (FULLSEC) or ns, ls, ms, hs and fs. These guarantee that the calling script is *at least* of that sec level.
 
 ### Converting a string (like "foo.bar") into a callable. **(NOT POSSIBLE!)**
