@@ -5,7 +5,7 @@ Originally created by @ciastex_ and @i20k, slightly edited and updated by @ryo\
 Special thanks to @dtr/@sudo, @ada and @soron for their expertise.
 
 If you have any questions, don't hesitate to hit us on Discord:
-https://discord.gg/sc6gVse 
+https://discord.gg/sc6gVse
 
 ## Index
 
@@ -59,11 +59,17 @@ Possible arguments ***AFTER*** the filename:
 
 ----
 
+### Downloading a script
+**Command:** `#down <filename>`\
+This command will download an already uploaded script from the server.\
+You could use this to download a script to another machine.\
+
+----
+
 ### Deleting a script localy
 **Command:** `#delete <filename>`\
 This command will remove your script from your computer’s file system, which means you won’t be able to access it from your editor anymore.\
 Be careful around this command, though - it runs without any confirmation.\
-*Note: if the script was previously uploaded, the server copy will still exist, but there is no way to download it again.*
 
 ----
 
@@ -108,20 +114,25 @@ args.target.call({/* optional arguments for the called scriptor */})
 If you want to call a hard-coded script (ed note: this isn’t technically a scriptor, it is just a script call), you can do so without using a scriptor, as follows.\
 Be aware, you cannot store a script to a variable like this:\
 ```js
-var x = #s.user.name
+var x = #fs.user.name
 ```
 
-As #s is really a preprocessing directive.  #s.user.name must be used immediately, in the form 
+As #s is really a preprocessing directive.  #s.user.name must be used immediately, in the form
 ```js
-#s.user.name({key:value})
+#fs.user.name({key:value})
 ```
 
 If you want to hard-code a script call that you can reuse, define a wrapper function, like:
 ```js
 function foo(args) {
-    return #s.user.name(args);
+    return #fs.user.name(args);
 }
 ```
+
+As of 20/10/2017, using the syntax `#s.user.script` will result in an error while uploading. The syntax for scriptors is still #s.user.script, however.\
+The new syntax is as follows:
+`#fs.user.script` OR `#4s.user.script`
+Sec levels go from 0 (NULLSEC) to 4 (FULLSEC) or ns, ls, ms, hs and fs. These guarantee that the calling script is *at least* of that sec level.
 
 ### Converting a string (like "foo.bar") into a callable. **(NOT POSSIBLE!)**
 Many people want to take a string, like a loc from an NPC corp, and call it directly inside another script.\
@@ -157,7 +168,7 @@ Macros are fairly simple, and very useful in hackmud. This is not strictly codin
 `/hl = kernel.hardline`
 `/dc = kernel.hardline{dc:true}`
 
-Running /macroname or /hl or /dc will run exactly that command. 
+Running /macroname or /hl or /dc will run exactly that command.
 
 Macro with arguments
 
@@ -220,7 +231,7 @@ var acct = new API.Account();
 acct.login("token or pass").then((data) => {
     // data is a account object
     // means it contains the users, token, last and the methods...
-    var username = data.users.username; 
+    var username = data.users.username;
 })
 ```
 
@@ -305,14 +316,14 @@ acct.login("token or pass").then((data) => {
 ## Scripts.lib
 This is a code library containing useful helper functions you can use in your scripts.
 
-Function name | Arguments | Returns | Description | Example (`var l = #s.scripts.lib();`)
+Function name | Arguments | Returns | Description | Example (`var l = #fs.scripts.lib();`)
 --- | --- | --- | --- | ---
 ok | none | `{ok:true}` | Helper method to save chars. | `return l.ok();`
 not_impl | none | `{ok:false, msg:"not implemented"}` | Helper method to save chars. | `return l.not_impl();`
 log | (message) | nothing | Pushes a string representation of a value onto an array of log messages. You have to use the method below to print it. | `l.log("hackmud is the best hacking game!")`
 get_log | none | Array containing the stored logs | Gets the stored logs, Does not clone or clear the array afterwards; it's a direct reference to the same array. | `var log_arr = l.get_log();`
 rand_int | (min, max) | integer | Returns a random integer between min/max | `var r = l.rand_int(0, 10);`
-are_ids_eq | (id1, id2) | boolean | Tests whether id1 and id2 values are equal. Apparently buggy at the moment. | 
+are_ids_eq | (id1, id2) | boolean | Tests whether id1 and id2 values are equal. Apparently buggy at the moment. |
 is_obj | (what) | boolean | Returns true if the what is a object. (Arrays are objs too) | `var is_obj = l.is_str({name:"ryo", gc:"1TGC"});`
 is_num | (what) | boolean | Returns true if the what is a Number. (This treats NaN (not a number) as not a number, even though in JS, typeof NaN == "number".) | `var b = l.is_num(2);`
 is_int | (what) | boolean | Returns true if what is is both a Number (via is_num), and also an integer. | `var b = l.is_int(3);`
@@ -333,7 +344,7 @@ cap_str_len | (string, length) | strring | Truncates the given string to the giv
 each | (array, fn) | array | Runs fn on each array element. | `var new_arr = l.each(old_arr, (key, val) => {...});`
 select | (array, fn) | array | Returns a collection of values from array that matches the fn predicate. If the predicate returns true, the select function adds the key:value pair currently processed to the returned collection of values. | `var new_arr = l.select(old_arr, (key, val) => val % 2 == 0 ? true : false);`
 count | (array, fn) | number | Returns a number of items from array that matches the fn predicate. If the predicate returns true, the count function increments the returned number by one. |
-select_one | (array, fn) | array | Same as the select function, but returns the first value that matches the predicate. | 
+select_one | (array, fn) | array | Same as the select function, but returns the first value that matches the predicate. |
 map | (array, fn) | array | Creates a new array with the results of calling a provided function on every element in the calling array. | `var new_arr = l.map(old_arr, x => x*2);`
 shuffle | (array) | array | Shuffles an array and returns it. |
 sort_asc | (one, two) | array | If one > two, returns 1. If two is greater than one, return -1. Else return 0. Looks like a sorting function |
