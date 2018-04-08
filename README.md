@@ -4,6 +4,8 @@
 Originally created by @ciastex_ and @i20k, slightly edited and updated by @ryo\
 Special thanks to @dtr/@sudo, @ada and @soron for their expertise.
 
+This documentation is a mirror of the community's [Scripting Tutorial (Google Docs)](https://docs.google.com/document/d/1cNms-T_KSFy0F5j1xHXrUZEGd7AM49QEork3KlpGqkc/edit?usp=sharing). If this document becomes out of date, check there for more recent information.
+
 If you have any questions, don't hesitate to hit us on Discord:
 https://discord.gg/sc6gVse
 
