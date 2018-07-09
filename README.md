@@ -19,6 +19,8 @@ https://discord.gg/sc6gVse
 - - [Listing all scripts](#listing-all-local-and-uploaded-scripts)
 - - [The help command](#the-help-command)
 - [Scripting](#scripting)
+- - [Special Script Commands](#special-script-commands)
+- - [Special Script Variables](#special-script-variables)
 - [Scripts.lib](#scriptslib)
 - [Macros](#macros)
 - [Database](#database)
@@ -55,9 +57,10 @@ You can create new scripts here and them upload them ingame.
 **Command:** `#up <filename>`\
 This command will upload your created script to the server, so you can execute it.\
 Possible arguments ***AFTER*** the filename:
-- delete - will delete your script from the server, but leave it locally.
-- public - will make your script public - assuming you have the public slot upgrade installed and loaded within your system.
-- private - will explicitly mark a script as private (useful to un-public a script while debugging, for example)
+- **delete**: will delete your script from the server, but leave it locally.
+- **public**: will make your script public - assuming you have the public slot upgrade installed and loaded within your system.
+- **private**: will explicitly mark a script as private (useful to un-public a script while debugging, for example)
+- **shift**: will 'shift' your script.  This is necessary if the security level changes, or you make it public for the first time. Takes approximately 15 minutes, during which you cannot interact with  the script.
 
 ----
 
@@ -88,15 +91,31 @@ This command will print the in-game architect commands help.
 
 ## Scripting
 
-Scripts in hackmud are JavaScript (ES6) files consisting of a single function which passes two parameters:\
+Scripts in hackmud are JavaScript (ES6 strict mode) files consisting of a single function with 2 arguments passed by the game:
+
 - context - This is a context the script is run from, i.e. if a user called noob ran your script, then any command executed from **context** will be treated as executed by the user who executed it, just like he/she would write them in their command line. **Context** has the following subkeys:
 - - `context.caller` - The name of the user who is calling the script (i.e. n00b)
 - - `context.this_script` - The name of this script
 - - `context.calling_script` - The name of the script that directly called this script, or null if called on the command line
+- - `context.cols` - The number of columns in the caller's terminal, if reported by the client.
 - `args` -  This is a dictionary containing all the arguments a user passed to your script.\
     If the script was called without any arguments (i.e. `foo.bar`), args will be null. If called with empty arguments (i.e. `foo.bar {}`), args will be an empty JS object.
 
-Example ez_21 cracker: [here](https://github.com/hackmud-unofficial/example-scripts/ez_21.js)
+### Character counts
+Hackmud does not count whitespace characters (space, tab, carriage return, newline, vertical tab, and possibly a few others), and does not count // comments. All other forms of comments are counted.
+
+Hackmud ignores // comments by replacing // through the end of a line with the empty string. The parser is not smart enough to know that // inside a string isn’t a comment.
+
+Thus,
+
+`var x="http://google.com"`
+
+will get mangled -- hackmud will truncate the line to
+
+`var x="http:`
+
+which will cause a syntax error. The easiest fix is to use /\/ anywhere you want // to appear.
+
 
 ### Scriptors
 
@@ -113,13 +132,15 @@ To call a command the scriptor points to, there’s a scriptor-specific method w
 args.target.call({/* optional arguments for the called scriptor */})
 ```
 
+### Subscripts
+
 If you want to call a hard-coded script (ed note: this isn’t technically a scriptor, it is just a script call), you can do so without using a scriptor, as follows.\
 Be aware, you cannot store a script to a variable like this:
 ```js
 var x = #fs.user.name
 ```
 
-As #s is really a preprocessing directive.  #s.user.name must be used immediately, in the form
+As #s is really a preprocessing directive. **#fs**.user.name must be used immediately, in the form
 ```js
 #fs.user.name({key:value})
 ```
@@ -160,6 +181,44 @@ function(context, args) { // arg1:val1, arg2:val2, arg3:#s.an.example, arg4:”e
 ```
 
 After uploading the script, you might need to run **scripts.user** to update your autocomplete, and then it should work.
+
+### Special Script Commands
+
+#D(ob) -- Debug Log
+
+If #D is called in a script you own, the return value of the top level script is suppressed and instead an array of every #D’d entry is printed. This lets you use #D kind of like console.log. #D in scripts not owned by you are not shown. #D returns its argument unchanged, so you can do things like return #D(ob) to return the object when the caller isn’t you, and debug-log it when it is you (allowing you to “keep” your returns with other debug logs). #D’d items are returned even if the script times out or errors.
+
+\#FMCL -- Function Multi-Call Lock
+
+#FMCL is what escrow.charge uses to ensure it is only called once per script execution. The first time (in each script) that #FMCL is encountered, it returns falsey, and every time thereafter it returns truthy. A common usage pattern is
+```js
+if(#FMCL)
+    return "error"
+// do work
+```
+The first time that block of code is hit, it will do work, and every time after it will return the error (this applies even if (and specifically for the case where) your script is called multiple times in the same execution)
+
+\#G -- Global
+
+#G is a per-script global object. It starts out blank, and you can add whatever properties you want to it. If your script is called multiple times in a single overall script run, its #G is persisted between those calls (but each script sees its own #G). This is useful to cache db lookups that won’t change in scripts that expect to be called many times. Sample usage:
+
+```js
+if(!#G.my_db_entry)
+    #G.my_db_entry=#db.f({whatever:true}).first();
+// use #G.my_db_entry in code below
+```
+
+
+### Special Script Variables
+
+### _START
+
+This contains a JS timestamp (not Date) set immediately before your code begins running. You can see how much time remains by doing Date.now()-_START
+
+### _TIMEOUT
+
+This contains the number of milliseconds a script is allowed to run for. Effectively always just 5000, except when a trust script is called on the command line and its value is, presumably, 8000.
+
 
 ## Macros
 
