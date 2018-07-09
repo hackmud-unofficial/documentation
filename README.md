@@ -19,6 +19,9 @@ https://discord.gg/sc6gVse
 - - [Listing all scripts](#listing-all-local-and-uploaded-scripts)
 - - [The help command](#the-help-command)
 - [Scripting](#scripting)
+- - [Scriptors](#scriptors)
+- - [Subscripts](#subscripts)
+- - [Autocomplete](#autocomplete)
 - - [Special Script Commands](#special-script-commands)
 - - [Special Script Variables](#special-script-variables)
 - [Scripts.lib](#scriptslib)
@@ -184,13 +187,13 @@ After uploading the script, you might need to run **scripts.user** to update you
 
 ### Special Script Commands
 
-#D(ob) -- Debug Log
+#### \#D(ob) -- Debug Log
 
 If #D is called in a script you own, the return value of the top level script is suppressed and instead an array of every #D’d entry is printed. This lets you use #D kind of like console.log. #D in scripts not owned by you are not shown. #D returns its argument unchanged, so you can do things like return #D(ob) to return the object when the caller isn’t you, and debug-log it when it is you (allowing you to “keep” your returns with other debug logs). #D’d items are returned even if the script times out or errors.
 
-\#FMCL -- Function Multi-Call Lock
+#### \#FMCL -- Function Multi-Call Lock
 
-#FMCL is what escrow.charge uses to ensure it is only called once per script execution. The first time (in each script) that #FMCL is encountered, it returns falsey, and every time thereafter it returns truthy. A common usage pattern is
+\#FMCL is what escrow.charge uses to ensure it is only called once per script execution. The first time (in each script) that #FMCL is encountered, it returns falsey, and every time thereafter it returns truthy. A common usage pattern is
 ```js
 if(#FMCL)
     return "error"
@@ -200,7 +203,7 @@ The first time that block of code is hit, it will do work, and every time after 
 
 \#G -- Global
 
-#G is a per-script global object. It starts out blank, and you can add whatever properties you want to it. If your script is called multiple times in a single overall script run, its #G is persisted between those calls (but each script sees its own #G). This is useful to cache db lookups that won’t change in scripts that expect to be called many times. Sample usage:
+\#G is a per-script global object. It starts out blank, and you can add whatever properties you want to it. If your script is called multiple times in a single overall script run, its #G is persisted between those calls (but each script sees its own #G). This is useful to cache db lookups that won’t change in scripts that expect to be called many times. Sample usage:
 
 ```js
 if(!#G.my_db_entry)
@@ -211,11 +214,11 @@ if(!#G.my_db_entry)
 
 ### Special Script Variables
 
-### _START
+#### _START
 
 This contains a JS timestamp (not Date) set immediately before your code begins running. You can see how much time remains by doing Date.now()-_START
 
-### _TIMEOUT
+#### _TIMEOUT
 
 This contains the number of milliseconds a script is allowed to run for. Effectively always just 5000, except when a trust script is called on the command line and its value is, presumably, 8000.
 
